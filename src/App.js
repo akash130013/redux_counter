@@ -1,25 +1,62 @@
-import logo from './logo.svg';
 import './App.css';
+import  {Container,Button} from '@material-ui/core'
+import {connect} from 'react-redux'
+import  {INCREMENT,DECREMENT,RESET} from './store/action'
 
-function App() {
+
+function App(props) {
+
+console.log(props);
+  // const[counter,setCounter]=useState(0)
+
+  const handleIncrement=(counter)=>{
+       props.dispatch({
+         type: INCREMENT,
+         payload:{
+           counter
+          }
+       })
+  }
+
+
+  const handleDecrement=(counter)=>{
+  props.dispatch({
+      type: DECREMENT,
+      payload:{
+        counter
+      }
+    })
+  }
+
+const handleReset=()=>{
+  props.dispatch({
+    type: RESET
+  })
+}
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+        <h2>Welcome To the Redux </h2>
+   
+       <p>Counter:{props.counter}</p>
+       <Button color="primary" variant="contained" onClick={()=>handleIncrement(props.counter)}>
+            Increment
+       </Button>
+       <Button color="primary" variant="contained" onClick={handleReset}>
+           RESET
+       </Button>
+       <Button color="secondary" variant="contained" onClick={()=>handleDecrement(props.counter)}>
+       
+         Decrement
+         </Button>
+    </Container>
   );
 }
 
-export default App;
+const mapStateToProps=(state) => {
+    return {counter:state.counter.counter}
+}
+
+
+
+export default connect(mapStateToProps)(App);
