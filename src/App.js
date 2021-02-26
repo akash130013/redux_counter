@@ -1,60 +1,109 @@
 import './App.css';
 import  {Container,Button} from '@material-ui/core'
 import {connect} from 'react-redux'
-import  {INCREMENT,DECREMENT,RESET} from './store/action'
-
+import  {INCREMENT,DECREMENT,RESET,MOUNT,UNMOUNT} from './store/action'
+import ClassLifeCycleMethod from './components/ClassLifeCycleMethod'
 
 function App(props) {
 
-console.log(props);
-  // const[counter,setCounter]=useState(0)
+const {counter,mount,dispatch}=props;
+ 
+const mountColor=mount ? 'primary' : 'default';
+const  unmountColor=mount ? 'default' : 'primary'
 
-  const handleIncrement=(counter)=>{
-       props.dispatch({
+  const handleIncrement=(count)=>{
+       dispatch({
          type: INCREMENT,
          payload:{
-           counter
+           count
           }
        })
   }
 
 
-  const handleDecrement=(counter)=>{
-  props.dispatch({
+  const handleDecrement=(count)=>{
+  dispatch({
       type: DECREMENT,
       payload:{
-        counter
+        count
       }
     })
   }
 
 const handleReset=()=>{
-  props.dispatch({
+  dispatch({
     type: RESET
   })
 }
+
+const handleMount=(flag)=>{
+    dispatch({
+      type: MOUNT,
+    })
+}
+
+const handleUnmount=(flag)=>{
+  dispatch({
+    type: UNMOUNT,
+  })
+}
+
+
 
   return (
     <Container>
         <h2>Welcome To the Redux </h2>
    
-       <p>Counter:{props.counter}</p>
-       <Button color="primary" variant="contained" onClick={()=>handleIncrement(props.counter)}>
+       <p>Counter:{counter}</p>
+       <Button color="primary" variant="contained" onClick={()=>handleIncrement(counter)}>
             Increment
        </Button>
        <Button color="primary" variant="contained" onClick={handleReset}>
            RESET
        </Button>
-       <Button color="secondary" variant="contained" onClick={()=>handleDecrement(props.counter)}>
+       <Button color="secondary" variant="contained" onClick={()=>handleDecrement(counter)}>
        
          Decrement
          </Button>
+
+         <h3>Class Life Cycle Methods</h3>
+
+
+
+         <Button 
+          color={mountColor} 
+         variant="contained"
+         onClick={()=>handleMount(counter)}
+         >
+       
+          Mount
+       </Button>
+
+       <Button 
+        color={unmountColor}
+        variant="contained"
+         onClick={()=>handleUnmount(counter)}
+         >
+       
+       UnMount
+    </Button>
+
+
+    {mount  &&
+         <ClassLifeCycleMethod name="hello props" />
+    }
     </Container>
   );
 }
 
 const mapStateToProps=(state) => {
-    return {counter:state.counter.counter}
+
+  const {count,mount}=state.counter;
+  
+    return {
+      counter:count,
+      mount:mount,
+    }
 }
 
 
